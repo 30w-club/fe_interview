@@ -3,10 +3,7 @@
     .title {{ title }}
     .desc {{ desc }}
     .grade
-      .grade_item(@click="clickGrade(0)") 0
-      .grade_item(@click="clickGrade(1)") 1
-      .grade_item(@click="clickGrade(2)") 2
-      .grade_item(@click="clickGrade(3)") 3
+      .grade_item(v-for="i in 4" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
 </template>
 
 <script>
@@ -18,7 +15,8 @@ export default {
     return {
       title: '',
       desc: '',
-      randomId: ''
+      randomId: '',
+      grade: 0
     }
   },
   created () {
@@ -28,8 +26,11 @@ export default {
     getRandomInt (min, max) {
       return Math.floor(Math.random() * (max - min)) + min
     },
+    getGradeStore () {
+      return JSON.parse(this.$cookie.get('grade_store')) || {}
+    },
     getIndexArr () {
-      const gradeStore = JSON.parse(this.$cookie.get('grade_store')) || {}
+      const gradeStore = this.getGradeStore()
       console.log('TCL: getIndexArr -> gradeStore', gradeStore)
 
       let indexArr = questions.map(question => question.id)
@@ -43,6 +44,7 @@ export default {
       return indexArr
     },
     getQuestion () {
+      const gradeStore = this.getGradeStore()
       const indexArr = this.getIndexArr()
       const randomIndex = this.getRandomInt(0, questions.length)
       this.randomId = indexArr[randomIndex]
@@ -50,10 +52,11 @@ export default {
       const question = questions.find(question => question.id === this.randomId)
       this.title = question.title
       this.desc = question.desc
+      this.grade = gradeStore[this.randomId]
     },
     clickGrade (grade) {
       console.log(grade)
-      const originalGradeStore = JSON.parse(this.$cookie.get('grade_store'))
+      const originalGradeStore = this.getGradeStore()
       let gradeStore = originalGradeStore || {}
       gradeStore[this.randomId] = grade
       this.$cookie.set('grade_store', JSON.stringify(gradeStore))
@@ -70,6 +73,9 @@ export default {
     justify-content: space-around;
     .grade_item {
       cursor: pointer;
+      &.active {
+        text-decoration: underline;
+      }
     }
   }
 }
