@@ -1,17 +1,20 @@
 <template lang="pug">
   .home_container
     .title {{ title }}
-    ul.desc
-      li.desc_item(v-for='item in desc') {{item}}
+    my-desc(:val="desc")
     .grade
       .grade_item(v-for="i in 4" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
 </template>
 
 <script>
 import { questions } from '../bank'
+import MyDesc from './home/Desc'
 
 export default {
   name: 'Home',
+  components: {
+    MyDesc
+  },
   data () {
     return {
       title: '',
@@ -51,6 +54,7 @@ export default {
       this.randomId = indexArr[randomIndex]
 
       const question = questions.find(question => question.id === this.randomId)
+      console.log('TCL: getQuestion -> question', question)
       this.title = question.title
       this.desc = question.desc
       this.grade = gradeStore[this.randomId]
@@ -74,13 +78,6 @@ export default {
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 20px;
-  }
-  .desc {
-    text-align: left;
-    margin: 50px 0;
-    .desc_item {
-      margin-bottom: 10px;
-    }
   }
   .grade {
     display: flex;
