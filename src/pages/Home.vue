@@ -1,7 +1,8 @@
 <template lang="pug">
   .home_container
     .title {{ title }}
-    .desc {{ desc }}
+    ul.desc
+      li.desc_item(v-for='item in desc') {{item}}
     .grade
       .grade_item(v-for="i in 4" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
 </template>
@@ -68,13 +69,33 @@ export default {
 
 <style lang="scss" scoped>
 .home_container {
+  padding: 20px;
+  .title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .desc {
+    text-align: left;
+    margin: 50px 0;
+    .desc_item {
+      margin-bottom: 10px;
+    }
+  }
   .grade {
     display: flex;
     justify-content: space-around;
     .grade_item {
       cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 100px;
+      background-color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       &.active {
-        text-decoration: underline;
+        background-color: rgb(175, 175, 175);
       }
     }
   }
