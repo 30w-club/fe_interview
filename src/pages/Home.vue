@@ -19,7 +19,7 @@ export default {
     return {
       title: '',
       desc: '',
-      randomId: '',
+      questionIndex: '',
       grade: 0
     }
   },
@@ -37,11 +37,11 @@ export default {
       const gradeStore = this.getGradeStore()
       console.log('TCL: getIndexArr -> gradeStore', gradeStore)
 
-      let indexArr = questions.map(question => question.id)
-      for (let questionId in gradeStore) {
-        const grade = gradeStore[questionId]
+      let indexArr = questions.map((question, idx) => idx)
+      for (let questionIndex in gradeStore) {
+        const grade = gradeStore[questionIndex]
         for (let i = 0; i < grade; i++) {
-          indexArr.push(parseInt(questionId))
+          indexArr.push(parseInt(questionIndex))
         }
       }
       console.log('TCL: getIndexArr -> indexArr', indexArr)
@@ -50,20 +50,20 @@ export default {
     getQuestion () {
       const gradeStore = this.getGradeStore()
       const indexArr = this.getIndexArr()
-      const randomIndex = this.getRandomInt(0, questions.length)
-      this.randomId = indexArr[randomIndex]
+      const randomPos = this.getRandomInt(0, indexArr.length)
+      this.questionIndex = indexArr[randomPos]
 
-      const question = questions.find(question => question.id === this.randomId)
+      const question = questions.find((question, idx) => idx === this.questionIndex)
       console.log('TCL: getQuestion -> question', question)
       this.title = question.title
       this.desc = question.desc
-      this.grade = gradeStore[this.randomId]
+      this.grade = gradeStore[this.questionIndex]
     },
     clickGrade (grade) {
       console.log(grade)
       const originalGradeStore = this.getGradeStore()
       let gradeStore = originalGradeStore || {}
-      gradeStore[this.randomId] = grade
+      gradeStore[this.questionIndex] = grade
       this.$cookie.set('grade_store', JSON.stringify(gradeStore))
       this.getQuestion()
     }

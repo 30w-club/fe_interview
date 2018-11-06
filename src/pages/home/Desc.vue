@@ -27,6 +27,7 @@ export default {
     margin: 50px 0;
     .desc_item {
       margin-bottom: 10px;
+      list-style: none;
     }
   }
 }
