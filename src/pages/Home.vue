@@ -1,14 +1,18 @@
 <template lang="pug">
   .home_container
+    .status
+      .bar
+        .grade_stage(v-for='i in gradeLength' :class="'stage_' + (i - 1)" :style='{ width: (stage[i - 1] || 0)/stageLength*100 + "%" }')
     .title {{ title }}
     my-desc(:val="desc")
     .grade
-      .grade_item(v-for="i in 4" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
+      .grade_item(v-for="i in gradeLength" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
 </template>
 
 <script>
 import { questions } from '../bank'
 import MyDesc from './home/Desc'
+import countBy from 'lodash.countby'
 
 export default {
   name: 'Home',
@@ -20,13 +24,28 @@ export default {
       title: '',
       desc: '',
       questionIndex: '',
-      grade: 0
+      grade: 0,
+      gradeLength: 4,
+      gradeVals: [],
+      stage: {}
+    }
+  },
+  computed: {
+    stageLength () {
+      return this.gradeVals.length
     }
   },
   created () {
+    console.log('TCL: created -> questions.length', questions.length)
     this.getQuestion()
+    this.initStatus()
   },
   methods: {
+    initStatus () {
+      const gradeStore = this.getGradeStore()
+      this.gradeVals = Object.values(gradeStore)
+      this.stage = countBy(this.gradeVals)
+    },
     getRandomInt (min, max) {
       return Math.floor(Math.random() * (max - min)) + min
     },
@@ -74,6 +93,28 @@ export default {
 <style lang="scss" scoped>
 .home_container {
   padding: 20px;
+  .status {
+    margin-bottom: 30px;
+    .bar {
+      display: flex;
+      border-radius: 100px;
+      .grade_stage {
+        height: 4px;
+        &.stage {
+          &_0,
+          &_1 {
+            background-color: rgb(30, 167, 30);
+          }
+          &_2 {
+            background-color: rgb(175, 185, 31);
+          }
+          &_3 {
+            background-color: rgb(172, 70, 39);
+          }
+        }
+      }
+    }
+  }
   .title {
     font-weight: bold;
     font-size: 18px;
