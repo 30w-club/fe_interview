@@ -23,4 +23,7 @@ html, body {
   color: #2c3e50;
   margin-top: 60px;
 }
+pre {
+  margin: 0;
+}
 </style>

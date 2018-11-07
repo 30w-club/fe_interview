@@ -3,7 +3,9 @@
     .status
       .bar
         .grade_stage(v-for='i in gradeLength' :class="'stage_' + (i - 1)" :style='{ width: (stage[i - 1] || 0)/stageLength*100 + "%" }')
-    .title {{ title }}
+    .title
+      pre(v-highlightjs='' :key="titleVal")
+        code(:class='titleType') {{titleVal}}
     my-desc(:val="desc")
     .grade
       .grade_item(v-for="i in gradeLength" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
@@ -21,7 +23,7 @@ export default {
   },
   data () {
     return {
-      title: '',
+      title: {},
       desc: '',
       questionIndex: '',
       grade: 0,
@@ -33,6 +35,12 @@ export default {
   computed: {
     stageLength () {
       return this.gradeVals.length
+    },
+    titleType () {
+      return this.title.type
+    },
+    titleVal () {
+      return this.title.val
     }
   },
   created () {
@@ -74,7 +82,7 @@ export default {
 
       const question = questions.find((question, idx) => idx === this.questionIndex)
       console.log('TCL: getQuestion -> question', question)
-      this.title = question.title
+      this.title = {...question.title}
       this.desc = question.desc
       this.grade = gradeStore[this.questionIndex]
     },
@@ -94,12 +102,11 @@ export default {
 .home_container {
   padding: 20px;
   .status {
-    margin-bottom: 30px;
     .bar {
       display: flex;
       border-radius: 100px;
       .grade_stage {
-        height: 4px;
+        height: 3px;
         &.stage {
           &_0,
           &_1 {
