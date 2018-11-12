@@ -3,7 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import VueCookie from 'vue-cookie'
 import hljs from 'highlight.js'
 
 Vue.directive('highlightjs', {
@@ -32,7 +31,6 @@ Vue.directive('highlightjs', {
   }
 })
 
-Vue.use(VueCookie)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

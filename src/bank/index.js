@@ -697,5 +697,30 @@ export const questions = [
       { type: types.plain, val: 'ES6扩展运算符' },
       { type: types.js, val: 'var copyObj = Object.assign({}, obj)' }
     ]
+  },
+  {
+    title: { type: types.plain, val: 'vue-router 实现路由切换' },
+    desc: [
+      { type: types.js, val: `Hash Mode:
+        改路由：
+          window.location.hash = path
+          window.location.replace(
+            window.location.href.slice(0, i >= 0 ? i : 0) + '#' + path
+          )
+        改视图：
+          Vue.mixin -> beforeCreate -> Vue.util.defineReactive(this, '_route', this._router.history.current);
+          当_route值改变时，会自动调用Vue实例的render()方法，更新视图
+
+        监听：window.addEventListener("hashchange", funcRef, false);
+      ` },
+      { type: types.js, val: `History Mode:
+        改路由：
+          window.history.pushState(stateObject,title,url)
+          window.history,replaceState(stateObject,title,url)
+
+        监听：window.addEventListener('popstate', e => {
+      `
+      }
+    ]
   }
 ]

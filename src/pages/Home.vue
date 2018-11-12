@@ -58,7 +58,7 @@ export default {
       return Math.floor(Math.random() * (max - min)) + min
     },
     getGradeStore () {
-      return JSON.parse(this.$cookie.get('grade_store')) || {}
+      return JSON.parse(window.localStorage.getItem('grade_store')) || {}
     },
     getIndexArr () {
       const gradeStore = this.getGradeStore()
@@ -91,7 +91,7 @@ export default {
       const originalGradeStore = this.getGradeStore()
       let gradeStore = originalGradeStore || {}
       gradeStore[this.questionIndex] = grade
-      this.$cookie.set('grade_store', JSON.stringify(gradeStore))
+      window.localStorage.setItem('grade_store', JSON.stringify(gradeStore))
       this.getQuestion()
       this.initStatus()
     }
