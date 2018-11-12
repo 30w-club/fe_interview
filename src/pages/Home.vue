@@ -27,7 +27,7 @@ export default {
       desc: '',
       questionIndex: '',
       grade: 0,
-      gradeLength: 4,
+      gradeLength: 6,
       gradeVals: [],
       stage: {}
     }
@@ -93,6 +93,7 @@ export default {
       gradeStore[this.questionIndex] = grade
       this.$cookie.set('grade_store', JSON.stringify(gradeStore))
       this.getQuestion()
+      this.initStatus()
     }
   }
 }
@@ -116,7 +117,11 @@ export default {
             background-color: rgb(175, 185, 31);
           }
           &_3 {
-            background-color: rgb(172, 70, 39);
+            background-color: rgb(199, 149, 92);
+          }
+          &_4,
+          &_5 {
+            background-color: rgb(202, 77, 46);
           }
         }
       }
