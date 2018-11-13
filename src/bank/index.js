@@ -722,5 +722,198 @@ export const questions = [
       `
       }
     ]
+  },
+  {
+    title: { type: types.plain, val: 'webpack loader' },
+    desc: [
+      { type: types.plain, val: 'loader 能够让 webpack 处理那些非 JavaScript 文件，并且先将它们转换为有效 模块，然后添加到依赖图中，这样就可以提供给应用程序使用' },
+      { type: types.plain, val: 'webpack.config.js -> module.rules -> test use' }
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'webpack plugin' },
+    desc: [
+      { type: types.plain, val: 'loader 被用于转换某些类型的模块，而插件则可以用于执行范围更广的任务，插件的范围包括：打包优化、资源管理和注入环境变量' },
+      { type: types.plain, val: 'webpack.config.js -> plugins -> new 一个 plugin 实例' }
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'vuex 解决了什么问题' },
+    desc: [
+      { type: types.plain, val: `
+        多个视图依赖于同一状态。
+        来自不同视图的行为需要变更同一状态。
+
+        对于问题一，传参的方法对于多层嵌套的组件将会非常繁琐，并且对于兄弟组件间的状态传递无能为力。
+        对于问题二，我们经常会采用父子组件直接引用或者通过事件来变更和同步状态的多份拷贝。以上的这些模式非常脆弱，通常会导致无法维护的代码。
+      ` },
+      { type: types.plain, val: '采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化' }
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'async 与 promise 区别' },
+    desc: [
+      { type: types.plain, val: `
+        真正地用同步的方式写异步代码
+        不用写then及其回调函数，减少代码行数，也避免了代码嵌套
+        所有异步调用可以写在同一个代码块中，无需定义多余的中间变量
+        async函数会隐式地返回一个Promise，因此可以直接return变量，无需使用Promise.resolve进行转换
+      ` }
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'debounce' },
+    desc: [
+      { type: types.js, val: `
+        function debounce(handle, delay) {
+          var timer = null
+          return function() {
+            var _this = this,
+                _arg = arguments
+            clearTimeout(timer)
+            timer = setTimeout(function() {
+              handle.apply(_this, _arg)
+            }, delay)
+          }
+        }
+      `}
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'http/2' },
+    desc: [
+      { type: types.plain, val: `二进制分帧
+        在应用层与传输层之间增加一个二进制分帧层
+        在二进制分帧层上，HTTP2.0会将所有传输的信息分割为更小的消息和帧,并对它们采用二进制格式的编码，其中HTTP1.x的首部信息会被封装到Headers帧，而我们的request body则封装到Data帧里面
+      `},
+      { type: types.plain, val: `压缩头部
+        HTTP/2.0规定了在客户端和服务器端会使用并且维护「首部表」来跟踪和存储之前发送的键值对，对于相同的头部，不必再通过请求发送，只需发送一次
+      `},
+      { type: types.plain, val: `多路复用
+        客户端和服务器可以把HTTP 消息分解为互不依赖的帧，然后乱序发送，最后再在另一端把它们重新组合起来。注意，同一链接上有多个不同方向的数据流在传输。客户端可以一边乱序发送stream，也可以一边接收者服务器的响应，而服务器那端同理
+      `},
+      { type: types.plain, val: `请求优先级
+        既然所有资源都是并行发送，那么就需要「优先级」的概念了，这样就可以对重要的文件进行先传输，加速页面的渲染。
+      `},
+      { type: types.plain, val: `强制 SSL
+        虽然 HTTP/2.0 协议并没声明一定要用 SSL，但是 Google Chrome 等浏览器强制要求使用 HTTP/2.0 必须要用上 SSL， 也就是说必须要： https://
+      `},
+      { type: types.plain, val: `服务器推送
+        服务器可以对一个客户端请求发送多个响应
+      `}
+    ]
+  },
+  {
+    title: { type: types.plain, val: '在 HTTP/1.1 时代主要增加了' },
+    desc: [
+      { type: types.plain, val: 'keep-alive 选项，建立连接后，在一定时间内不会断开，其他请求都可以使用这条连接' },
+      { type: types.plain, val: 'pipelining 管道，通过这个管道，浏览器的多个请求可以同时发到服务器，但是服务器的响应只能够一个接着一个的返回 ( 但各大浏览器有些不支持/默认关闭,因此这功能可以说是鸡肋)' }
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'Service Worker' },
+    desc: [
+      { type: types.js, val: `注册
+        if (navigator.serviceWorker) {  
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('恭喜。作用范围: ', registration.scope);
+            })
+            .catch(error => {
+              console.log('抱歉', error);
+            });
+        }
+        // 浏览器会找到 /sw.js 文件，然后保存在当前被访问的域名的名下。该文件包含各类事件的处理逻辑，整体定义你的Service Worker的行为
+      `},
+      {
+        type: types.js, val: `install 事件；在安装阶段缓存资源
+          const CACHE_NAME = 'cache-v1';  
+          const urlsToCache = [  
+            '/',
+            '/js/main.js',
+            '/css/style.css',
+            '/img/bob-ross.jpg',
+          ];
+
+          self.addEventListener('install', event => {  
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                return cache.addAll(urlsToCache);
+              });
+          });
+        `
+      },
+      {
+        type: types.js, val: `fetch 事件
+          self.addEventListener('fetch', event => {  
+            const { request } = event;
+            const findResponsePromise = caches.open(CACHE_NAME)
+              .then(cache => cache.match(request))
+              .then(response => {
+                if (response) {
+                  return response;
+                }
+          
+                return fetch(request);
+              });
+          
+            event.respondWith(findResponsePromise);
+          });
+        `
+      },
+      {
+        type: types.js, val: `activate 事件
+          当实际的网页关掉并重新打开时，浏览器会将原先的Service Worker替换成新的，然后在 install 事件之后触发 activate 事件。如果你需要清理缓存或者针对原来的SW执行维护性操作，activate 事件就是做这些事情的绝佳时机
+        `
+      },
+      {
+        type: types.js, val: `sync 事件
+          // app.js
+          navigator.serviceWorker.ready  
+            .then(registration => {
+              document.getElementById('submit').addEventListener('click', () => {
+                registration.sync.register('submit').then(() => {
+                  console.log('sync registered!');
+                });
+              });
+            });
+
+          // sw.js
+          self.addEventListener('sync', event => {  
+            if (event.tag === 'submit') {
+              console.log('sync!');
+            }
+          });
+        `
+      },
+      {
+        type: types.js, val: `消息推送
+          // app.js
+          // ask for permission
+          Notification.requestPermission(permission => {  
+            console.log('permission:', permission);
+          });
+          
+          // display notification
+          function displayNotification() {  
+            if (Notification.permission == 'granted') {
+              navigator.serviceWorker.getRegistration()
+                .then(registration => {
+                  registration.showNotification('this is a notification!');
+                });
+            }
+          }
+
+          // sw.js
+          self.addEventListener('notificationclick', event => {  
+            // 消息提醒被点击的事件
+          });
+
+          self.addEventListener('notificationclose', event => {  
+            // 消息提醒被关闭的事件
+          });
+        `
+      }
+    ]
   }
 ]
