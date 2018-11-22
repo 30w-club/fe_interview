@@ -68,5 +68,35 @@ export default [
         async/await`
       }
     ]
+  },
+  {
+    title: { type: types.plain, val: 'http 请求报文' },
+    desc: [
+      {
+        type: types.plain, val: `Request
+        请求行
+        头部
+        请求数据
+        `
+      },
+      {
+        type: types.plain, val: `Request
+        状态行
+        头部
+        响应正文
+        `
+      }
+    ]
+  },
+  {
+    title: { type: types.plain, val: 'cookie' },
+    desc: [
+      {
+        type: types.plain, val: `作用
+        对话（session）管理：保存登录、购物车等需要记录的信息。
+        个性化：保存用户的偏好，比如网页的字体大小、背景色等等。
+        追踪：记录和分析用户行为。`
+      }
+    ]
   }
 ]
