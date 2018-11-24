@@ -1,18 +1,18 @@
 <template lang="pug">
   .home_container
+    .create(@click="goToCreate") create
     .status
       .bar
-        .grade_stage(v-for='i in gradeLength' :class="'stage_' + (i - 1)" :style='{ width: (stage[i - 1] || 0)/stageLength*100 + "%" }')
+        .grade_stage(v-for='i in gradeLength' :class="'stage_' + (i - 1)" :style='{ width: (stage[i - 1] || 0)/gradeValArr.length*100 + "%" }')
     .title
-      pre(v-highlightjs='' :key="titleVal")
-        code(:class='titleType') {{titleVal}}
-    my-desc(:val="desc")
+      pre(v-highlightjs='' :key="subject.title.val")
+        code(:class='subject.title.type') {{subject.title.val}}
+    my-desc(:val="subject.desc")
     .grade
-      .grade_item(v-for="i in gradeLength" @click="clickGrade(i - 1)" :class='{ active: grade === (i - 1)}') {{i - 1}}
+      .grade_item(v-for="i in gradeLength" @click="clickGrade(i - 1)" :class='{ active: subject.grade === (i - 1)}') {{i - 1}}
 </template>
 
 <script>
-import { questions } from '../bank'
 import MyDesc from './home/Desc'
 import countBy from 'lodash.countby'
 
@@ -23,77 +23,35 @@ export default {
   },
   data () {
     return {
-      title: {},
-      desc: '',
-      questionIndex: '',
-      grade: 0,
-      gradeLength: 6,
-      gradeVals: [],
-      stage: {}
+      gradeLength: 6
     }
   },
   computed: {
-    stageLength () {
-      return this.gradeVals.length
+    subject () {
+      return this.$store.state.subject
     },
-    titleType () {
-      return this.title.type
+    grades () {
+      return this.$store.state.grades
     },
-    titleVal () {
-      return this.title.val
+    gradeValArr () {
+      return this.grades.map(grade => grade.val)
+    },
+    stage () {
+      return countBy(this.gradeValArr)
     }
   },
   created () {
-    console.log('TCL: created -> questions.length', questions.length)
-    this.getQuestion()
-    this.initStatus()
+    this.$idb.getSubject()
   },
   methods: {
-    initStatus () {
-      const gradeStore = this.getGradeStore()
-      this.gradeVals = Object.values(gradeStore)
-      this.stage = countBy(this.gradeVals)
-    },
-    getRandomInt (min, max) {
-      return Math.floor(Math.random() * (max - min)) + min
-    },
-    getGradeStore () {
-      return JSON.parse(window.localStorage.getItem('grade_store')) || {}
-    },
-    getIndexArr () {
-      const gradeStore = this.getGradeStore()
-      console.log('TCL: getIndexArr -> gradeStore', gradeStore)
-
-      let indexArr = questions.map((question, idx) => idx)
-      for (let questionIndex in gradeStore) {
-        const grade = gradeStore[questionIndex]
-        for (let i = 0; i < grade; i++) {
-          indexArr.push(parseInt(questionIndex))
-        }
-      }
-      console.log('TCL: getIndexArr -> indexArr', indexArr)
-      return indexArr
-    },
-    getQuestion () {
-      const gradeStore = this.getGradeStore()
-      const indexArr = this.getIndexArr()
-      const randomPos = this.getRandomInt(0, indexArr.length)
-      this.questionIndex = indexArr[randomPos]
-
-      const question = questions.find((question, idx) => idx === this.questionIndex)
-      console.log('TCL: getQuestion -> question', question)
-      this.title = {...question.title}
-      this.desc = question.desc
-      this.grade = gradeStore[this.questionIndex]
-    },
     clickGrade (grade) {
-      console.log(grade)
-      const originalGradeStore = this.getGradeStore()
-      let gradeStore = originalGradeStore || {}
-      gradeStore[this.questionIndex] = grade
-      window.localStorage.setItem('grade_store', JSON.stringify(gradeStore))
-      this.getQuestion()
-      this.initStatus()
+      this.$idb.updateGrade(this.subject.key, parseInt(grade))
+        .then(() => {
+          this.$idb.getSubject()
+        })
+    },
+    goToCreate () {
+      this.$router.push({ name: 'Create' })
     }
   }
 }
