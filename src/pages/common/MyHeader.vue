@@ -1,7 +1,11 @@
 <template lang="pug">
   .my_header
-    .fa.fa-home(@click="goTo('Home')")
-    .fa.fa-inbox(@click="goTo('Create')")
+    <router-link to="/">
+      .fa.fa-home
+    </router-link>
+    <router-link to="/create">
+      .fa.fa-inbox
+    </router-link>
 </template>
 
 <script>
@@ -22,9 +26,14 @@ export default {
   justify-content: space-between;
   height: 50px;
   padding: 0 10px;
+  .router-link-exact-active {
+    .fa {
+      color: rgb(44, 44, 44);
+    }
+  }
   .fa {
     cursor: pointer;
-    color: rgb(122, 122, 122);
+    color: rgb(175, 175, 175);
   }
 }
 </style>

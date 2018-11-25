@@ -12,7 +12,7 @@
         textarea(placeholder='Desc' v-model="item.val")
       .add
         .fa.fa-plus(@click="addDesc")
-    .confirm(@click="addItem") 
+    .confirm(@click="addItem")
       .confirm_main
         span Confirm
         i.fa.fa-check

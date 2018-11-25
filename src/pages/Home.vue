@@ -11,7 +11,7 @@
     .grade(v-if='!noSubject')
       .grade_item(v-for="i in gradeLength" @click="clickGrade(i - 1)" :class='{ active: subject.grade === (i - 1)}') {{i - 1}}
     .no_subject(v-if='noSubject')
-      span  Found No Subject, 
+      span  Found No Subject,
       span.create_one(@click="goToCreate")  Create One
 </template>
 
