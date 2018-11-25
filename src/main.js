@@ -6,6 +6,7 @@ import router from './router'
 import hljs from 'highlight.js'
 import idb from './idb'
 import store from './store'
+import 'font-awesome/scss/font-awesome.scss'
 
 Vue.use(idb)
 

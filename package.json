@@ -11,6 +11,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "highlight.js": "^9.13.1",
     "lodash.countby": "^4.6.0",
     "vue": "^2.5.2",
