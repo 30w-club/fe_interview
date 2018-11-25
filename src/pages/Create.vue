@@ -61,7 +61,7 @@ export default {
       bankItem.desc = [...desc]
       if (bankItem.title.val && bankItem.desc[0].val) {
         const resp = await this.$idb.add(bankItem)
-        console.log(resp)
+        if (resp.target) this.$router.push({name: 'Home'})
       }
     },
     addDesc () {
