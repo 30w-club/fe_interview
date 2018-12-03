@@ -21,11 +21,10 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  padding: 10px;
+  padding: 20px 50px;
   background-color: #f1f1f1;
   min-height: 100vh;
   min-width: 350px;
-  /* margin-top: 60px; */
 }
 pre {
   margin: 0;
